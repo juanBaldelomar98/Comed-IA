@@ -47,6 +47,7 @@ def generate_large_audio_transcription(path: str):
                 pass
             else:
                 text = f"{text.capitalize()}. "
+                print("prueba", text)
                 transcript_chunks.append(text)
 
     return transcript_chunks, intervals
@@ -75,7 +76,7 @@ def get_large_audio_transcription(path: str, ignore: bool = False) -> tuple:
         np.save(intervals_path, intervals)
         transcript = ""
         for chunk in transcript_chunks:
-            aux_string = transcript + chunk.lower() + "\n"
+            transcript += chunk.lower() + "\n"
         f = open(transcript_path, "w", encoding="utf-8")
         f.write(transcript)
         f.close()

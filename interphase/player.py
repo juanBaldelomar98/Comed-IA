@@ -2,5 +2,5 @@
 import numpy as np
 
 
-def start_ui(audio_speech: tuple, graphic: np.ndarray):
+def start_ui(audio_speech: list, graphic: np.ndarray):
     ...
