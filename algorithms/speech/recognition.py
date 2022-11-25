@@ -7,7 +7,7 @@ from tqdm import tqdm
 from tempfile import TemporaryDirectory
 
 from pydub import AudioSegment
-from pydub.silence import split_on_silence, detect_silence, detect_nonsilent
+from pydub.silence import split_on_silence
 
 TEMP_DIRECTORY = TemporaryDirectory()
 TEMP_PATH = TEMP_DIRECTORY.name
