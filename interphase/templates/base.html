@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    /* Create two equal columns that floats next to each other */
+    .column {
+      float: left;
+      width: 50%;
+      padding: 10px;
+      height: 300px; /* Should be removed. Only for demonstration */
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .progress {
+      width:100%;
+      height:350px;
+      border:10px solid #555;
+      margin-bottom:1rem;
+      background-image:
+        linear-gradient(
+          to right,
+          rgba(0, 255, 0, 0.45),
+          rgba(0, 255, 0, 0.45) 50%,
+          rgba(0,0,0,0) 50%,
+          rgba(0,0,0,0)
+        ),
+        url({{ url_for('plot' ) }});
+
+    }
+    </style>
+  </head>
+  <body>
+    <div class="progress"></div>
+    <audio
+    class="audio" style="width: 100%;" src={{ url_for('static', filename='sample_a1.wav' ) }} controls></audio>
+    <div style="color: green;" class="result"></div>
+
+    <div class="row">
+      <div class="column" style="background-color:#aaa;">
+        <h2>Script</h2>
+        <p id="scr_jk"></p>
+      </div>
+      <div class="column" style="background-color:#bbb;">
+        <h2>Texto identificado</h2>
+        <p id="tr_jk"></p>
+      </div>
+    </div>
+    <script type="text/javascript">
+      function Get(yourUrl){
+        var Httpreq = new XMLHttpRequest(); // a new request
+        Httpreq.open("GET",yourUrl,false);
+        Httpreq.send(null);
+        return Httpreq.responseText;
+      }
+      var json = Get({{ url_for('script' ) }})
+      var obj = JSON.parse(json)
+
+      var progressBar = document.getElementsByClassName("progress").item(0);
+      let audioEle = document.querySelector(".audio");
+      var a = 5.7
+      var b = 4.95
+
+      function updateText(){
+        for(var k in obj) {
+          beg_interval = obj[k].time_interval[0]
+          end_interval = obj[k].time_interval[1]
+          if(audioEle.currentTime >= beg_interval && audioEle.currentTime < end_interval) {
+            document.getElementById("scr_jk").innerHTML = obj[k].script_joke;
+            document.getElementById("tr_jk").innerHTML = obj[k].transcript_joke;
+          }
+        }
+      }
+
+      function updateProgressBar(){
+        var progressPercent = audioEle.currentTime / audioEle.duration;
+        progressPercent = a + (100-a-b)*progressPercent
+
+        progressBar.style.backgroundImage = "linear-gradient( " +
+            "to right," +
+            "rgba(0, 255, 0, 0.45), " +
+            "rgba(0, 255, 0, 0.45) " + progressPercent + "%," +
+            "rgba(0,0,0,0) " + progressPercent + "%," +
+            "rgba(0,0,0,0)" +
+          ")," +
+          "url({{ url_for('plot' ) }})";
+      }
+      setInterval("updateProgressBar()", 100);
+      setInterval("updateText()", 100);
+    </script>
+  </body>
+</html>

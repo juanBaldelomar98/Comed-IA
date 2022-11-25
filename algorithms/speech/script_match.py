@@ -1,5 +1,6 @@
 """Script that matches transcript obtained from audio to the scripted show"""
-import nltk, string
+import nltk
+import string
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.corpus import stopwords
 
