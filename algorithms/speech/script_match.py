@@ -7,35 +7,40 @@ from nltk.corpus import stopwords
 nltk.download('punkt')
 nltk.download('stopwords')
 
+
 def load_script(path: str) -> list:
-    f = open("./script_loteria_2.txt", "r", encoding="utf-8")
+    f = open(path, "r", encoding="utf-8")
     script = f.read()
     f.close()
     jokes = script.split("[JUMP]")
     return jokes
 
+
 def stem_tokens(tokens):
     return [stemmer.stem(item) for item in tokens]
 
+
 def normalize(text):
     return stem_tokens(nltk.word_tokenize(text.lower().translate(remove_punctuation_map)))
+
 
 def similarity(text1: str, text2:str) -> float:
     tfidf = vectorizer.fit_transform([text1, text2])
     return ((tfidf * tfidf.T).A)[0,1]
 
-# stopwords = [word.decode('utf-8') for word in stopwords.words('spanish')]
+stops = stopwords.words('spanish')
 
 stemmer = nltk.stem.porter.PorterStemmer()
 remove_punctuation_map = dict((ord(char), None) for char in string.punctuation)
-vectorizer = TfidfVectorizer(tokenizer=normalize, stop_words=stopwords)
+vectorizer = TfidfVectorizer(tokenizer=normalize, stop_words=stops)
+
 
 def obtain_best_match_last_words(joke: str, transcript: list) -> (float,int):
     score = 0
     for i, line in enumerate(transcript):
         length = len(line)
         last_words = joke[-length:]
-        current_score = similarity(line,last_words)
+        current_score = similarity(line, last_words)
         if score < current_score:
             score = current_score
             best_index = i

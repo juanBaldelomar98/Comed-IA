@@ -23,10 +23,5 @@ def start_ui(list_of_jokes: list, graphic) -> flask.app.Flask:
     @app.route('/script/')
     def script():
         return jsonify(list_of_jokes)
-        # return jsonify(
-        #     username="a",
-        #     email="b",
-        #     id="c"
-        # )
 
     return app

@@ -60,6 +60,7 @@ def get_laughing_instances(audio_path: str, probabilities: np.ndarray):
 
     probabilities = lowpass(probabilities)
     instances = [get_laughter_instances(probabilities, threshold=threshold, min_length=MIN_LENGTH, fps=fps) for threshold in THRESHOLDS]
+
     return instances
 
 
@@ -81,5 +82,6 @@ def generate_laugh_predictions(audio_path: str):
     inference_generator = load_features(audio_path, config, feature_fn)
     probabilities = make_predictions(model, inference_generator)
     laugh_instances = get_laughing_instances(audio_path, probabilities)
-    return laugh_instances
+    points = draw_laughs_graphic(laugh_instances)
+    return points
 
