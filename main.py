@@ -1,5 +1,5 @@
 """Main script for the comedy processor."""
-# from algorithms.audio_process.speech import process_speech
+from algorithms.audio_process.speech import process_speech
 from algorithms.audio_process.visualizer import generate_graphics
 from interphase.player import start_ui
 
@@ -13,9 +13,9 @@ test_data = [
 ]
 
 if __name__ == "__main__":
-    audio = "input_data/audios/sample_a1.wav"
+    audio = "input_data/audios/loteria_3.wav"
     script = "input_data/scripts/loteria_2.txt"
-    # list_of_jokes = process_speech(audio, script)
+    list_of_jokes = process_speech(audio, script)
     graphic = generate_graphics(audio)
     app = start_ui(test_data, graphic)
     app.run(port=2000)
